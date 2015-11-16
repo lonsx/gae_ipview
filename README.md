@@ -35,6 +35,11 @@ mod 1.3
 
 添加函数getipbynet()以适应GAE
 
+mod 1.4
+-----------------
+
+由于ipaddresslabs.com的demo license不再可用，修改查询部分form，使用纯真ip库查询
+
 # 源码
 
 源码修改自[ip429006.com](http://ip429006.com)，感谢！

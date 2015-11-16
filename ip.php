@@ -119,8 +119,49 @@ function getflag(){
 //*
 //用二分查找法在索引区内搜索ip
 //*
+//判定字符串是否是 IP 地址
+function IsIPAdress($value){
+
+    //if (preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $value)){
+    if (preg_match('/^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/', $value)){	//新的ip匹配正则
+        return true;
+    }
+    return false;
+}
+//gethostbyname()和shell_exec()不管用时，通过查询其他的免费网站获取域名对应的ip
+function getipbynet($host){
+	if($this->IsIPAdress($host)){
+		return $host;
+		}
+	else{
+		$url_c="http://www.ip.cn/getip.php?action=queryip&ip_url=".$host;
+		error_reporting(7); 
+		$file_c = fopen ($url_c, "rb"); //远程打开查询url
+		if (!$file_c) { //若不存在，输出错误信息
+					echo "<font color=red>Unable to open remote file.</font>\n"; 
+					exit; 
+					}
+		while (!feof ($file_c)) { //逐行遍历$file，查询匹配字符串并输出（出错情况指定）
+								$line = fgets ($file_c, 1024); 
+								//if (eregi ("<code>(.*)</code>",iconv('gbk','UTF-8//IGNORE',$line),$out)) {
+								if (eregi ("<code>(.*)</code>",$line,$out)) { 
+												//echo "ERROR! Worng ip or hostname!"; 
+												$m=$out[1];
+												$z = true;
+												break;
+												} 
+					 		   }
+		fclose($file_c);
+		if($z){
+			//return iconv('UTF-8//IGNORE','gbk',trim($m));
+			return trim($m);
+			}
+		return $host;
+		}
+						  }
 function searchip($ip){
-  $ip=gethostbyname($ip);     //将域名转成ip
+  //$ip=gethostbyname($ip);     //将域名转成ip
+  $ip=$this->getipbynet($ip);
   $ip_offset["ip"]=$ip;
   $ip=$this->iptoint($ip);    //将ip转换成长整型
   $firstip=0;                 //搜索的上边界

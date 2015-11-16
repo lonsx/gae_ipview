@@ -310,13 +310,13 @@ if ($p){//制表显示ip查询结果
 
 <!--//----------自加代码结束---------->
 <div id="locaIp"></div><br>
-<!--<div id="queryIp"></div>
+<div id="queryIp"></div>
 <br>
 <form id="ipform" name="ipform" method="post" action="javascript:void(0)">
 <input name="ip_url" type="text" class="socss" id="ip_url" size="28" /> 
 <input name="Submit" type="submit" class="btn" value=" 查 询 " onClick="getipdata('queryip','queryIp')"/>
-</form>-->
-<div align=center>
+</form>
+<!--/*<div align=center>
 <?php
 //If we submitted the form
 if(isset($_POST['Submit'])){
@@ -338,7 +338,7 @@ else{
 <?php
 	}
 ?>
-</div>
+</div>*/-->
 </center>
 <script language="javascript">
 function myObjRequest(){
