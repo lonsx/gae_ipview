@@ -1,10 +1,10 @@
-﻿<html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Tip's IP View</title>
 </head>
 <!--//----------去Sitemix广告---------->
-<style>
+<!--<style>
 #meerkat-wrap{
 display:none!important;
 }
@@ -55,6 +55,40 @@ function getAddrByHost($host, $timeout = 3) {
 			return trim($matches[1]);
 		return $host;
 											}
+//gethostbyname()和shell_exec()不管用时，通过查询其他的免费网站获取域名对应的ip
+function getipbynet($host){
+		$url_c="http://www.ip.cn/getip.php?action=queryip&ip_url=".$host;
+		error_reporting(7); 
+		$file_c = fopen ($url_c, "rb"); //远程打开查询url
+		if (!$file_c) { //若不存在，输出错误信息
+					echo "<font color=red>Unable to open remote file.</font>\n"; 
+					exit; 
+					}
+		while (!feof ($file_c)) { //逐行遍历$file，查询匹配字符串并输出（出错情况指定）
+								$line = fgets ($file_c, 1024); 
+								if (eregi ("<code>(.*)</code>",iconv('gbk','UTF-8//IGNORE',$line),$out)) { 
+												//echo "ERROR! Worng ip or hostname!"; 
+												$m=$out[1];
+												$z = true;
+												break;
+												} 
+					 		   }
+
+		/*$file_c = fopen ($url_c, "r");
+		while(!feof($file_c)){
+			$l=fgets($file_C,1024);
+			$result.="\xEF\xBB\xBF".iconv('gbk','utf-8',$l);
+				 			}
+		echo "url body: ".$result;
+		printhr();*/
+		fclose($file_c);
+		if($z){
+			//$r=iconv('UTF-8//IGNORE','gbk',trim($m));
+			return trim($m);
+			}
+			
+		return $host;
+						  }
 //--------ip查询-------------->
 function geo($a,$key){
 //global $ip_address,$continent_name,$country_code,$country_name,$region_code,$region_name,$city,$postal_code,$latitude,$longitude,$isp;
@@ -69,13 +103,16 @@ if($ip_url){
 			else {
 				  
 				  //$ip=getAddrByHost($ip_url, $timeout = 3);
-				  $ip=gethostbyname($ip_url);
+				  //$ip=gethostbyname($ip_url);
+				  $ip=getipbynet($ip_url);
 				  if(IsIPAdress($ip)){
+									 //$url="http://services.ipaddresslabs.com/iplocation/locatehostname?key=".$key."&hostname=".$ip;//叠加查询url字符串
 									 $url="http://services.ipaddresslabs.com/iplocation/locateip?key=".$key."&ip=".$ip;//叠加查询url字符串
 									 $l="您查询的域名：";
 									 filter($url,$l,$ip_url);
 									 }
 				  else{
+					  print "/".$ip."/";
 					  echo "ERROR! Worng ip or hostname!";
 					  }
 				 }
@@ -99,9 +136,9 @@ while (!feof ($file)) { //逐行遍历$file，查询匹配字符串并输出（�
 			$p = true;
 			break;
 			} 
-					 }			
+					 }	
 if ($p){
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { //逐行遍历$file，查询匹配字符串并输出
 				$line = fgets ($file, 1024);  
 				if (eregi ("<ip_address>(.*)</ip_address>", $line, $out)) { 
@@ -112,7 +149,7 @@ if ($p){
 								break;
 								}
 				} 
-		rewind($file);//重置文件指针位置
+		//rewind($file);//重置文件指针位置
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<continent_name>(.*)</continent_name>", $line, $out)) { 
@@ -120,7 +157,7 @@ if ($p){
 					break;
 					} 
 				}			
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<country_code_iso3166alpha2>(.*)</country_code_iso3166alpha2>", $line, $out)) { 
@@ -128,7 +165,7 @@ if ($p){
 				break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<country_name>(.*)</country_name>", $line, $out)) { 
@@ -136,7 +173,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<region_code>(.*)</region_code>", $line, $out)) { 
@@ -144,7 +181,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<region_name>(.*)</region_name>", $line, $out)) { 
@@ -152,7 +189,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<city>(.*)</city>", $line, $out)) { 
@@ -160,7 +197,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<postal_code>(.*)</postal_code>", $line, $out)) { 
@@ -168,7 +205,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<latitude>(.*)</latitude>", $line, $out)) { 
@@ -176,7 +213,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<longitude>(.*)</longitude>", $line, $out)) { 
@@ -184,7 +221,7 @@ if ($p){
 					break;
 					} 
 				}
-		rewind($file);
+		//rewind($file);
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<isp>(.*)</isp>", $line, $out)) { 
@@ -203,6 +240,7 @@ else{
 				} 
 						  }
 	echo $status;
+	
 	//echo $url;
 	/*rewind($file);
 	while(!feof($file)){
