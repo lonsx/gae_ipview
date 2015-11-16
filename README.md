@@ -29,10 +29,10 @@ ip地址的定位采用了两种方法：
 
 # 源码
 
-源码修改自[ip429006.com](ip429006.com)，感谢！
+源码修改自[ip429006.com](http://ip429006.com)，感谢！
 
 Demo
 =========================
 
-- http://ip.lonsx.cf/(GAE)
-- http://tip.hp2.jp/(sitemix)
+- http://ip.lonsx.cf/ (GAE)
+- http://tip.hp2.jp/ (sitemix)
