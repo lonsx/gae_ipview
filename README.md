@@ -31,6 +31,16 @@ ip地址的定位采用了两种方法：
 
 源码修改自[ip429006.com](http://ip429006.com)，感谢！
 
+# 相关资源
+
+## qqwry.dat 更新
+
+- http://www.cz88.net/ （官网）
+
+## 纯真ip库相关
+
+- https://github.com/gwind/ylinux/tree/master/tools/IP/QQWry
+
 Demo
 =========================
 
