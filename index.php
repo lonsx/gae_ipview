@@ -1,9 +1,9 @@
-<html>
+ï»¿<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <title>Tip's IP View</title>
 </head>
-<!--//----------È¥Sitemix¹ã¸æ---------->
+<!--//----------å»Sitemixå¹¿å‘Š---------->
 <style>
 #meerkat-wrap{
 display:none!important;
@@ -11,60 +11,98 @@ display:none!important;
 #sitemix_pr_footer_js{
 display:none!important;
 }
+#geniee_overray_base{
+display:none!important;
+}
 </style>
-<!--//----------È¥Sitemix¹ã¸æ---------->
-<body>
-<center><h3>Tip's IP²éÑ¯(ËÑË÷IPµØÖ·µÄµØÀíÎ»ÖÃ)</h3></center>
+<!--//----------å»Sitemixå¹¿å‘Š---------->
+<noframes><body></noframes>
+<center><h3>Tip's IPæŸ¥è¯¢(æœç´¢IPåœ°å€çš„åœ°ç†ä½ç½®)</h3></center>
 <center>
-<!--//----------×Ô¼Ó´úÂë¿ªÊ¼---------->
+<!--//----------è‡ªåŠ ä»£ç å¼€å§‹---------->
 <?php
-$iip=$_SERVER["REMOTE_ADDR"];//»ñÈ¡¿Í»§¶Ëip
-$iurl="http://services.ipaddresslabs.com/iplocation/locateip?key=SAKKH9P7835PZ8XU9N7Z&ip=".$iip;//µş¼Ó²éÑ¯url×Ö·û´®
-?>
-<div width=100% align="center">
-<fieldset align="left" style="width:500px;">
-<legend>ÄãµÄip£º<font color=red><?php echo $iip;?></font> ĞÅÏ¢ÈçÏÂ£º<br></legend>
-<?php geo($iurl);?>
-</fieldset>
-</div>
-<?php
-/*function get_contents($url){
-              $ch = curl_init();     
-              curl_setopt ($ch, CURLOPT_URL, $url);     
-              curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-              curl_setopt ($ch, CURLOPT_TIMEOUT, 1000); 
-              $file_contents = curl_exec($ch);     
-              curl_close($ch);
-              return $file_contents;
-       }*/
-//ÅĞ¶¨×Ö·û´®ÊÇ·ñÊÇ IP µØÖ·
+//global $key;
+$key=demo;//æŒ‡å®šipaddresslabs.comæ‰€ç”¨çš„key
+$iip=$_SERVER["REMOTE_ADDR"];//è·å–å®¢æˆ·ç«¯ip
+$iurl="http://services.ipaddresslabs.com/iplocation/locateip?key=".$key."&ip=".$iip;//å åŠ æŸ¥è¯¢urlå­—ç¬¦ä¸²
+$il="æ‚¨çš„ipï¼š";
+filter($iurl,$il,$iip);//æ˜¾ç¤ºclientçš„ipä¿¡æ¯
+
+//æµ‹è¯•ä»£ç ï¼Œçœ‹æ˜¯å¦æ”¯æŒfopen
+/*$u="http://www.google.com/";
+$fp=fopen($u,'r');
+while(!feof($fp)){
+			$result.=fgets($fp,1024);
+				 }
+echo "url body: ".$result;
+printhr();
+fclose($fp);*/
+
+//åˆ¤å®šå­—ç¬¦ä¸²æ˜¯å¦æ˜¯ IP åœ°å€
 function IsIPAdress($value){
 
-    if (preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $value)){
+    //if (preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $value)){
+    if (preg_match('/^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/', $value)){	//æ–°çš„ipåŒ¹é…æ­£åˆ™
         return true;
     }
     return false;
 }
-//--------ipĞÅÏ¢ÂË³ö-------------->
-function geo($iurl){
+//Returns the IPv4 address or a string containing the unmodified hostname on failure.
+function getAddrByHost($host, $timeout = 3) {
+		$query = 'nslookup -timeout='.$timeout.' -retry=1 '.$host." 8.8.8.8";
+		$query = shell_exec($query);
+		if(preg_match('/\nAddress: (.*)\n/', $query, $matches))
+			return trim($matches[1]);
+		return $host;
+											}
+//--------ipæŸ¥è¯¢-------------->
+function geo($a,$key){
 //global $ip_address,$continent_name,$country_code,$country_name,$region_code,$region_name,$city,$postal_code,$latitude,$longitude,$isp;
+$ip_url = trim($a);
+if($ip_url){
+			if(IsIPAdress($ip_url)) {
+									$ip=$ip_url;
+									$url="http://services.ipaddresslabs.com/iplocation/locateip?key=".$key."&ip=".$ip;//å åŠ æŸ¥è¯¢urlå­—ç¬¦ä¸²
+									$l="æ‚¨æŸ¥è¯¢çš„ipï¼š";
+									filter($url,$l,$ip_url);
+									} 
+			else {
+				  
+				  //$ip=getAddrByHost($ip_url, $timeout = 3);
+				  $ip=gethostbyname($ip_url);
+				  if(IsIPAdress($ip)){
+									 $url="http://services.ipaddresslabs.com/iplocation/locateip?key=".$key."&ip=".$ip;//å åŠ æŸ¥è¯¢urlå­—ç¬¦ä¸²
+									 $l="æ‚¨æŸ¥è¯¢çš„åŸŸåï¼š";
+									 filter($url,$l,$ip_url);
+									 }
+				  else{
+					  echo "ERROR! Worng ip or hostname!";
+					  }
+				 }
+			}
+else{
+	echo "None!";
+	}
+				}
+//--------ipä¿¡æ¯æ»¤å‡º-------------->
+function filter($url,$l,$ip_url){
 error_reporting(7); 
-$file = fopen ($iurl, "r"); //Ô¶³Ì´ò¿ª²éÑ¯url
-if (!$file) { //Èô²»´æÔÚ£¬Êä³ö´íÎóĞÅÏ¢
+$file = fopen ($url, "r"); //è¿œç¨‹æ‰“å¼€æŸ¥è¯¢url
+if (!$file) { //è‹¥ä¸å­˜åœ¨ï¼Œè¾“å‡ºé”™è¯¯ä¿¡æ¯
 			echo "<font color=red>Unable to open remote file.</font>\n"; 
 			exit; 
 			}
-while (!feof ($file)) { //ÖğĞĞ±éÀú$file£¬²éÑ¯Æ¥Åä×Ö·û´®²¢Êä³ö£¨³ö´íÇé¿öÖ¸¶¨£©
+while (!feof ($file)) { //é€è¡Œéå†$fileï¼ŒæŸ¥è¯¢åŒ¹é…å­—ç¬¦ä¸²å¹¶è¾“å‡ºï¼ˆå‡ºé”™æƒ…å†µæŒ‡å®šï¼‰
 		$line = fgets ($file, 1024); 
 		if (eregi ("<query_status_code>OK</query_status_code>", $line)) { 
 			//echo "ERROR! Worng ip or hostname!"; 
 			$p = true;
 			break;
 			} 
-	 }
+					 }			
 if ($p){
 		rewind($file);
-		while (!feof ($file)) { //ÖğĞĞ±éÀú$file£¬²éÑ¯Æ¥Åä×Ö·û´®²¢Êä³ö
+		while (!feof ($file)) { //é€è¡Œéå†$fileï¼ŒæŸ¥è¯¢åŒ¹é…å­—ç¬¦ä¸²å¹¶è¾“å‡º
 				$line = fgets ($file, 1024);  
 				if (eregi ("<ip_address>(.*)</ip_address>", $line, $out)) { 
 					$ip_address = $out[1]; 
@@ -74,7 +112,7 @@ if ($p){
 								break;
 								}
 				} 
-		rewind($file);//ÖØÖÃÎÄ¼şÖ¸ÕëÎ»ÖÃ
+		rewind($file);//é‡ç½®æ–‡ä»¶æŒ‡é’ˆä½ç½®
 		while (!feof ($file)) { 
 				$line = fgets ($file, 1024); 
 				if (eregi ("<continent_name>(.*)</continent_name>", $line, $out)) { 
@@ -154,111 +192,113 @@ if ($p){
 					break;
 					} 
 				}
-		}else{
-			echo "ERROR! Worng ip or hostname!";
-			}
+		}
+else{
+	$file = fopen ($url, "r");
+	while (!feof ($file)) { 
+			$line = fgets ($file, 1024); 
+			if (eregi ("<query_status_description>(.*)</query_status_description>", $line, $out)) { 
+				$status = $out[1]; 
+				break;
+				} 
+						  }
+	echo $status;
+	//echo $url;
+	/*rewind($file);
+	while(!feof($file)){
+			$result.=fgets($file,1024);
+				 }
+	echo "url body: ".$result;
+	printhr();*/
+	
+	}
 fclose($file); 
-if ($p){//ÖÆ±íÏÔÊ¾ip²éÑ¯½á¹û
+if ($p){//åˆ¶è¡¨æ˜¾ç¤ºipæŸ¥è¯¢ç»“æœ
 ?>
+<div width=100% align="center">
+<fieldset align="left" style="width:500px;">
+<legend><?php echo $l;?> <font color=red><?php echo $ip_url;?></font> ä¿¡æ¯å¦‚ä¸‹ï¼š<br></legend>
 <div align="center">
 <table width="500" border="0">
   <tr>
-    <th width="84" align="right" scope="row">ipµØÖ·£º</th>
+    <th width="84" align="right" scope="row">ipåœ°å€ï¼š</th>
     <td width="306" align="center"><?php echo $ip_address;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">µØÓò£º</th>
+    <th align="right" scope="row">åœ°åŸŸï¼š</th>
     <td align="center"><?php echo $continent_name;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">¹ú¼Ò´úÂë£º</th>
+    <th align="right" scope="row">å›½å®¶ä»£ç ï¼š</th>
     <td align="center"><?php echo $country_code;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">¹ú¼Ò£º</th>
+    <th align="right" scope="row">å›½å®¶ï¼š</th>
     <td align="center"><?php echo $country_name;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">ÇøÓò´úÂë£º</th>
+    <th align="right" scope="row">åŒºåŸŸä»£ç ï¼š</th>
     <td align="center"><?php echo $region_code;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">ÇøÓò£º</th>
+    <th align="right" scope="row">åŒºåŸŸï¼š</th>
     <td align="center"><?php echo $region_name;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">³ÇÊĞ£º</th>
+    <th align="right" scope="row">åŸå¸‚ï¼š</th>
     <td align="center"><?php echo $city;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">ÓÊ±à£º</th>
+    <th align="right" scope="row">é‚®ç¼–ï¼š</th>
     <td align="center"><?php echo $postal_code;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">¾­Î³¶È£º</th>
+    <th align="right" scope="row">ç»çº¬åº¦ï¼š</th>
     <td align="center"><?php echo $latitude." x ".$longitude;?></td>
   </tr>
   <tr>
-    <th align="right" scope="row">ISP£º</th>
+    <th align="right" scope="row">ISPï¼š</th>
     <td align="center"><?php echo $isp;?></td>
   </tr>
 </table>
 </div>
+</fieldset>
+</div>
 <?php
 		}
-				}
+					  }
 ?>
 
 
-<!--//----------×Ô¼Ó´úÂë½áÊø---------->
+<!--//----------è‡ªåŠ ä»£ç ç»“æŸ---------->
 <div id="locaIp"></div><br>
 <!--<div id="queryIp"></div>
 <br>
 <form id="ipform" name="ipform" method="post" action="javascript:void(0)">
 <input name="ip_url" type="text" class="socss" id="ip_url" size="28" /> 
-<input name="Submit" type="submit" class="btn" value=" ²é Ñ¯ " onClick="getipdata('queryip','queryIp')"/>
+<input name="Submit" type="submit" class="btn" value=" æŸ¥ è¯¢ " onClick="getipdata('queryip','queryIp')"/>
 </form>-->
 <div align=center>
 <?php
 //If we submitted the form
 if(isset($_POST['Submit'])){
-							$ip_url = trim($_POST["ip_url"]);//È¥³ıÊ×Î²¿Õ°××Ö·û
-							if($ip_url){
-										if(IsIPAdress($ip_url)) {
-											$qurl = "http://services.ipaddresslabs.com/iplocation/locateip?key=SAKKH9P7835PZ8XU9N7Z&ip=".$ip_url;
-											} else {
-													$qurl = "http://services.ipaddresslabs.com/iplocation/locatehostname?key=SAKKH9P7835PZ8XU9N7Z&hostname=".$ip_url;
-													}
 ?>
-										<form action="<?php $_SERVER['PHP_SELF']?>" method="POST">
-										<input type="text" name="ip_url" id="ip_url" size="28">
-										<input type="submit" value=" ²é Ñ¯ " name="Submit">
-										</form>
-									<div width=100% align="center">
-									<fieldset align="left" style="width:500px;">
-									<legend>Äã²éÑ¯µÄip£º<font color=red><?php echo $ip_url;?></font> ĞÅÏ¢ÈçÏÂ£º<br></legend>
-									<?php geo($qurl);?>
-									</fieldset>
-									</div>
-<?php
-										}else{
-?>
-										<form action="<?php $_SERVER['PHP_SELF']?>" method="POST">
-										<input type="text" name="ip_url" id="ip_url" size="28">
-										<input type="submit" value=" ²é Ñ¯ " name="Submit">
-										</form>
-<?php
-										echo "None!";
-											}
+							<form action="<?php $_SERVER['PHP_SELF']?>" method="POST">
+							<input type="text" name="ip_url" id="ip_url" size="28">
+							<input type="submit" value=" æŸ¥ è¯¢ " name="Submit">
+							</form>
+<?php 
+							geo($_POST["ip_url"],$key);
+							}
 //If we haven't submitted the form
-	}else{
+else{
 ?>
     <form action="<?php $_SERVER['PHP_SELF']?>" method="POST">
     <input type="text" name="ip_url" id="ip_url" size="28">
-    <input type="submit" value=" ²é Ñ¯ " name="Submit">
+    <input type="submit" value=" æŸ¥ è¯¢ " name="Submit">
     </form>
 <?php
-		}
+	}
 ?>
 </div>
 </center>
@@ -288,11 +328,11 @@ function getipdata(action,divname){
   myObj.onreadystatechange=function(){
     if (myObj.readyState==4){
 	  //alert(myObj.readyState);
-	  if (myObj.status==200){ //¶ÁÈ¡µÄÊı¾İÕıÈ·
+	  if (myObj.status==200){ //è¯»å–çš„æ•°æ®æ­£ç¡®
 	     document.getElementById(divname).innerHTML=myObj.responseText;
 	  }
 	  else {
-	     document.getElementById(divname).innerHTML="»ñÈ¡±¾µØIP³ö´í,ÇëË¢ĞÂ±¾Ò³»òÁªÏµ¹ÜÀíÔ±!";
+	     document.getElementById(divname).innerHTML="è·å–æœ¬åœ°IPå‡ºé”™,è¯·åˆ·æ–°æœ¬é¡µæˆ–è”ç³»ç®¡ç†å‘˜!";
 	  }
 	}
   }
@@ -301,5 +341,5 @@ function getipdata(action,divname){
 getipdata("getip","locaIp");
 </script>
 <center>Copyright 2013. All rights reserved.</center>
-</body>
+<div style="display:none;"></body>
 </html>

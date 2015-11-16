@@ -1,5 +1,5 @@
 <?php
-header("content-type:text/html;charset=GB2312");
+header("content-type:text/html;charset=gbk");
 
 //*
 //文件头 [第一条索引的偏移量 (4byte)] + [最后一条索引的偏移地址 (4byte)]     8字节

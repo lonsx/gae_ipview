@@ -25,6 +25,11 @@ mod 1.1
 
 引入ipaddresslabs.com的api进行ip查询
 
+mod 1.2
+-----------------
+
+调整代码结构
+
 # 源码
 
 源码修改自[ip429006.com](http://ip429006.com)，感谢！
