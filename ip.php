@@ -134,7 +134,8 @@ function getipbynet($host){
 		return $host;
 		}
 	else{
-		$url_c="http://www.ip.cn/getip.php?action=queryip&ip_url=".$host;
+		//$url_c="http://www.ip.cn/index.php?ip=".$host;
+		$url_c="http://ip38.com/ip.php?ip=".$host;//另一ip查询网站
 		error_reporting(7); 
 		$file_c = fopen ($url_c, "rb"); //远程打开查询url
 		if (!$file_c) { //若不存在，输出错误信息
@@ -144,7 +145,8 @@ function getipbynet($host){
 		while (!feof ($file_c)) { //逐行遍历$file，查询匹配字符串并输出（出错情况指定）
 								$line = fgets ($file_c, 1024); 
 								//if (eregi ("<code>(.*)</code>",iconv('gbk','UTF-8//IGNORE',$line),$out)) {
-								if (eregi ("<code>(.*)</code>",$line,$out)) { 
+								//if (eregi ("<code>(.*)</code>",$line,$out)) { 
+								if (eregi ("IP：<font color=#FF0000>(.*)</font>&nbsp;",$line,$out)) { 
 												//echo "ERROR! Worng ip or hostname!"; 
 												$m=$out[1];
 												$z = true;
@@ -160,8 +162,8 @@ function getipbynet($host){
 		}
 						  }
 function searchip($ip){
-  //$ip=gethostbyname($ip);     //将域名转成ip
-  $ip=$this->getipbynet($ip);
+  $ip=gethostbyname($ip);     //将域名转成ip
+  //$ip=$this->getipbynet($ip);
   $ip_offset["ip"]=$ip;
   $ip=$this->iptoint($ip);    //将ip转换成长整型
   $firstip=0;                 //搜索的上边界

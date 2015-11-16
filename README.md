@@ -40,6 +40,11 @@ mod 1.4
 
 由于ipaddresslabs.com的demo license不再可用，修改查询部分form，使用纯真ip库查询
 
+mod 1.5
+-----------------
+
+添加footer一直位于底部特性，并更改护眼色
+
 # 源码
 
 源码修改自[ip429006.com](http://ip429006.com)，感谢！

@@ -2,9 +2,53 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Tip's IP View</title>
+
+<style type="text/css">
+html,body{
+	margin:0; padding:0;
+	/*color:#4d4b4b;*/
+	background: #C7EDCC;/*护眼色*/
+	/*background: #d8d9d0;*/
+	font-size:14px;	
+	height: 100%;
+}
+
+#container{
+	width:100%;
+	margin:0px auto;
+	text-align:center;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	position: relative;
+}
+
+#header {
+	padding: 10px;
+}
+
+#page {
+	width:960px;
+	margin: 0 auto;
+	padding-bottom: 20px;/*等于footer的高度*/
+}
+
+#footer{ 
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 20px;/*脚部的高度*/
+	/*background: #6cf;*/
+	clear:both;
+	}
+
+h3{font-size: 23px;}
+
+</style>
+
 </head>
 <!--//----------去Sitemix广告---------->
-<!--<style>
+<style>
 #meerkat-wrap{
 display:none!important;
 }
@@ -17,12 +61,13 @@ display:none!important;
 </style>
 <!--//----------去Sitemix广告---------->
 <noframes><body></noframes>
-<center><h3>Tip's IP查询(搜索IP地址的地理位置)</h3></center>
+	<div id="container">
+		<div id="header"><center><h3>Tip's IP查询(搜索IP地址的地理位置)</h3></center></div>
 <center>
 <!--//----------自加代码开始---------->
 <?php
-//global $key;
 $key=demo;//指定ipaddresslabs.com所用的key
+//Our public demo license has been retired. Please get your own license.
 $iip=$_SERVER["REMOTE_ADDR"];//获取客户端ip
 $iurl="http://services.ipaddresslabs.com/iplocation/locateip?key=".$key."&ip=".$iip;//叠加查询url字符串
 $il="您的ip：";
@@ -57,7 +102,7 @@ function getAddrByHost($host, $timeout = 3) {
 											}
 //gethostbyname()和shell_exec()不管用时，通过查询其他的免费网站获取域名对应的ip
 function getipbynet($host){
-		$url_c="http://www.ip.cn/getip.php?action=queryip&ip_url=".$host;
+		$url_c="http://www.ip.cn/index.php?ip=".$host;
 		error_reporting(7); 
 		$file_c = fopen ($url_c, "rb"); //远程打开查询url
 		if (!$file_c) { //若不存在，输出错误信息
@@ -103,8 +148,8 @@ if($ip_url){
 			else {
 				  
 				  //$ip=getAddrByHost($ip_url, $timeout = 3);
-				  //$ip=gethostbyname($ip_url);
-				  $ip=getipbynet($ip_url);
+				  $ip=gethostbyname($ip_url);
+				  //$ip=getipbynet($ip_url);
 				  if(IsIPAdress($ip)){
 									 //$url="http://services.ipaddresslabs.com/iplocation/locatehostname?key=".$key."&hostname=".$ip;//叠加查询url字符串
 									 $url="http://services.ipaddresslabs.com/iplocation/locateip?key=".$key."&ip=".$ip;//叠加查询url字符串
@@ -137,7 +182,7 @@ while (!feof ($file)) { //逐行遍历$file，查询匹配字符串并输出（�
 			break;
 			} 
 					 }	
-if ($p){
+if ($p){//滤出匹配字符字段
 		//rewind($file);
 		while (!feof ($file)) { //逐行遍历$file，查询匹配字符串并输出
 				$line = fgets ($file, 1024);  
@@ -239,8 +284,13 @@ else{
 				break;
 				} 
 						  }
-	echo $status;
-	
+	if ($status){
+		echo "Something is wrong ! The error code is".$status.".";
+				}
+	else{
+		global $key;//在function中调用外部全局变量的声明
+		echo "<div>The ipaddresslabs key :<font color=red>".$key."</font> can not be used anymore !<br><br></div>\n";
+		}
 	//echo $url;
 	/*rewind($file);
 	while(!feof($file)){
@@ -307,7 +357,6 @@ if ($p){//制表显示ip查询结果
 					  }
 ?>
 
-
 <!--//----------自加代码结束---------->
 <div id="locaIp"></div><br>
 <div id="queryIp"></div>
@@ -316,6 +365,7 @@ if ($p){//制表显示ip查询结果
 <input name="ip_url" type="text" class="socss" id="ip_url" size="28" /> 
 <input name="Submit" type="submit" class="btn" value=" 查 询 " onClick="getipdata('queryip','queryIp')"/>
 </form>
+
 <!--/*<div align=center>
 <?php
 //If we submitted the form
@@ -340,7 +390,25 @@ else{
 ?>
 </div>*/-->
 </center>
+		<div id="page"><br>
+<!--/*<script type="text/javascript"> 
+for(var i=0; i<400; i++){ 
+document.write(i+'<br/>'); 
+} 
+</script>*/-->
+		</div>
+		<div id="footer"><center>Copyright © 2015. All rights reserved.</center></div>
+
+	</div>
 <script language="javascript">
+//类似 PHP 中的 trim
+function trim(str) {
+        var str = str.replace(/^\s\s*/, ''),
+            ws = /\s/,
+            i = str.length;
+        while (ws.test(str.charAt(--i)));
+        return str.slice(0, i + 1);
+    }
 function myObjRequest(){
 	var myhttp=null;
 	try {
@@ -358,7 +426,8 @@ function myObjRequest(){
 }
 
 function getipdata(action,divname){
-  var ip_url=document.getElementById("ip_url").value;
+  var a=document.getElementById("ip_url").value;
+  var ip_url=trim(a);
   var url="ip.php?action="+action+"&ip_url="+ip_url;
   //alert(url);
   var myObj=myObjRequest();
@@ -378,6 +447,5 @@ function getipdata(action,divname){
   }
 getipdata("getip","locaIp");
 </script>
-<center>Copyright 2013. All rights reserved.</center>
 <div style="display:none;"></body>
 </html>
