@@ -376,8 +376,15 @@ else{
 	}
 ?>
 </div>*/-->
-</center>
+
 		<div id="page"><br>
+</center>
+<center><?php 
+$a=filemtime("qqwry.dat"); 
+echo "Update Time:".date("Y-m-d H:i:s",$a)." 
+"; 
+?></center>
+<br>
 <!--/*<script type="text/javascript"> 
 for(var i=0; i<400; i++){ 
 document.write(i+'<br/>'); 

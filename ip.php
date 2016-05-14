@@ -1,5 +1,5 @@
 <?php
-header("content-type:text/html;charset=gbk");
+header("content-type:text/html;charset=GB2312");
 
 //*
 //文件头 [第一条索引的偏移量 (4byte)] + [最后一条索引的偏移地址 (4byte)]     8字节
@@ -261,7 +261,7 @@ if ($action=="queryip"){
   $myobj=new ipLocation();
   $address=$myobj->getaddress($ip_url);
   $myobj=NULL;
-  $str="<h2><font color=green>您查询的IP是：".$address["ip"]."</font></h2>&nbsp;&nbsp;所在地为：".$address["area1"]." ".$address["area2"];
+  $str="<h3><font color=green>您查询的IP是：".$address["ip"]."</font></h2>&nbsp;&nbsp;所在地为：".$address["area1"]." ".$address["area2"];
   echo $str;
 }
 ?>
