@@ -44,5 +44,5 @@ ip地址的定位采用了两种方法：
 Demo
 =========================
 
-- http://ip.lonsx.cf/ (GAE)
+- http://ip.lonsx.com/ (GAE)
 - http://tip.hp2.jp/ (sitemix)

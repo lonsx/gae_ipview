@@ -391,7 +391,7 @@ document.write(i+'<br/>');
 } 
 </script>*/-->
 		</div>
-		<div id="footer"><center>Copyright © 2016. All rights reserved.</center></div>
+		<div id="footer"><center>Copyright © 2021. All rights reserved.</center></div>
 
 	</div>
 <script language="javascript">
